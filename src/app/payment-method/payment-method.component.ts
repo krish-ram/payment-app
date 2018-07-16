@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import * as luhn from 'fast-luhn';
+import * as luhn from 'luhn';
+
 
 @Component({
   selector: 'app-payment-method',
@@ -37,8 +38,7 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   validateCardNo() {
-    console.log(luhn(this.cardNo.toString()));
-    this.cardError = !(luhn(this.cardNo.toString()));
+    this.cardError = !(luhn.validate(this.cardNo.toString()));
   }
 
   validateMonth() {

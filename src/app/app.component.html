@@ -1,20 +1,69 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-</div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://github.com/angular/angular-cli/wiki">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
-
+<div class="container">
+  <div class="row">
+    <h4>Welcome to Payment Wall</h4>
+  </div>
+  <div class="row">
+    <div class="col-md-8 p-0">
+      <div class="card">
+        <div class="card-body">
+          <form #form="ngForm" *ngIf="!showSuccess && !showPayment">
+            <h5 class="card-title">Ram's E-Payment </h5>
+            <div class="col-md-12 p-0">
+              <div class="col-md-4 d-inline-block p-0">
+                <label for="amount">Amount</label>
+              </div>
+              <div class="col-md-4 d-inline-block">
+                <input type="tel" class="form-control" name="amount" [(ngModel)]="amount" placeholder="Amount to be paid" (blur)="transform($event)"
+                  required />
+              </div>
+            </div>
+            <div class="col-md-12">&nbsp;</div>
+            <div class="col-md-12 p-0">
+              <div class="col-md-4 p-0 d-inline-block">Country</div>
+              <div class="col-md-8 d-inline-block">
+                <p-dropdown [options]="countries" name="country" [(ngModel)]="selectedCountry" placeholder="Select a Country" optionLabel="name"
+                  filter="true" (onChange)="selectCountry($event)"></p-dropdown>
+              </div>
+            </div>
+            <div class="col-md-12">&nbsp;</div>
+            <div class="col-md-12 p-0">
+              <div class="col-md-4 p-0 d-inline-block">Payment method</div>
+              <div class="col-md-8 d-inline-block" *ngIf="paymentSystems.length >0">
+                <p-dropdown [options]="paymentSystems" name="payment" [(ngModel)]="selectedPayment" placeholder="Select payment method" optionLabel="name">
+                  <ng-template let-item pTemplate="selectedItem">
+                    <img src="{{item.value.img_url}}" style="width:16px;vertical-align:middle" />
+                    <span style="vertical-align:middle">{{item.value.name}}</span>
+                  </ng-template>
+                  <ng-template let-item pTemplate="item">
+                    <div class="ui-helper-clearfix" style="position: relative;height:25px;">
+                      <img src="{{item.value.img_url}}" style="width:24px;position:absolute;top:1px;left:5px" />
+                      <div style="font-size:14px;float:right;margin-top:4px">{{item.value.name}}</div>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <button class="btn btn-success float-right" [disabled]="!form.valid" type="button" (click)="onSubmit()">Submit</button>
+            </div>
+          </form>
+          <div class="row">
+            <div class="col-md-12">&nbsp;</div>
+            <ng-container *ngIf="!showSuccess && showPayment">
+              <div class="col-md-12 p-0">
+                <app-payment-method [amount]="newAmount" [payment]="selectedPayment" (paymentSuccess)="paymentStatus($event)"></app-payment-method>
+              </div>
+            </ng-container>
+          </div>
+          <ng-container *ngIf="showSuccess">
+            <div class="col-md-12">
+              <div class="col text-center">
+                <img src="../assets/check-circle.gif" width="200" height="200">
+              </div>
+              <div class="col text-center">Transaction Successful.</div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
